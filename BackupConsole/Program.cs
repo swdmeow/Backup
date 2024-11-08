@@ -8,7 +8,7 @@ namespace BackupConsole
         {
             Console.WriteLine("Action:\n[1] - Encryption key generation\n[2] - File decryption\n");
 
-            string choice = Console.ReadLine();
+            string choice = Console.ReadLine()!;
 
             Console.Clear();
 
@@ -17,10 +17,10 @@ namespace BackupConsole
                 case "1":
                     {
                         Console.WriteLine("Key security:\n[1] - Low\n[2] - Medium\n[3] - High\n");
-                        string keyChoice = Console.ReadLine();
+                        string keyChoice = Console.ReadLine()!;
 
                         Console.WriteLine("Folder for saving the key\n");
-                        string directory = Console.ReadLine();
+                        string directory = Console.ReadLine()!;
 
                         GenerateKeyToFile(directory, keyChoice == "1" ? KeyLenght.Small : keyChoice == "2" ? KeyLenght.Medium : KeyLenght.Long);
                         break;
@@ -28,12 +28,12 @@ namespace BackupConsole
                 case "2":
                     {
                         Console.WriteLine("Path to encryption key:\n");
-                        string keyPatch = Console.ReadLine();
+                        string keyPatch = Console.ReadLine()!;
 
                         byte[] key = GetKeyFromFile(keyPatch);
 
                         Console.WriteLine("Full file path\n");
-                        string filePatch = Console.ReadLine();
+                        string filePatch = Console.ReadLine()!;
 
                         if (DecryptFile(filePatch, key))
                         {
@@ -63,14 +63,16 @@ namespace BackupConsole
         /// <returns>Returns the path to the created key file</returns>
         public static void GenerateKeyToFile(string patchDirectory, KeyLenght keyLenght)
         {
+            
             using (FileStream FileStream = new FileStream(Path.Combine(patchDirectory, "key.txt"), FileMode.Create))
             {
-                AesManaged aesManaged = new AesManaged();
+                Aes aesManaged = Aes.Create();
                 aesManaged.KeySize = (int)keyLenght;
 
                 aesManaged.GenerateKey();
                 FileStream.Write(aesManaged.Key, 0, aesManaged.Key.Length);
             }
+
             Console.WriteLine("File path: " + Path.Combine(patchDirectory, "key.txt"));
             Console.ReadLine();
         }
@@ -98,8 +100,11 @@ namespace BackupConsole
 
                     fileStreamSource.Read(initializationVector, 0, initializationVector.Length);
 
-                    using (AesManaged aesManaged = new AesManaged() { Key = key, IV = initializationVector })
+                    using (Aes aesManaged = Aes.Create())
                     {
+                        aesManaged.Key = key;
+                        aesManaged.IV = initializationVector;
+
                         using (CryptoStream cryptoStream = new CryptoStream(fileStreamSource, aesManaged.CreateDecryptor(), CryptoStreamMode.Read, true))
                         {
                             using (FileStream fileStreamDestination = File.Create(tempPath))

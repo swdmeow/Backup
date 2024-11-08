@@ -2,38 +2,36 @@
 using System.ComponentModel;
 using Exiled.API.Interfaces;
 
-namespace Backup
+namespace Backup;
+public class Config : IConfig
 {
-    public class Config : IConfig
-    {
-        [Description("Indicates plugin enabled or not.")]
-        public bool IsEnabled { get; set; } = false;
+    [Description("Indicates plugin enabled or not.")]
+    public bool IsEnabled { get; set; } = false;
 
-        [Description("Directories to be saved.")]
-        public string[] LogFolders { get; set; } = { Path.Combine(Encrypt.AppData, "EXILED"), Path.Combine(Encrypt.AppData, "SCP Secret Laboratory") };
+    [Description("Directories to be saved.")]
+    public string[] LogFolders { get; set; } = { Path.Combine(Encrypt.AppData, "EXILED"), Path.Combine(Encrypt.AppData, "SCP Secret Laboratory") };
 
-        [Description("Files to be saved.")]
-        public string[] LogFiles { get; set; } = { Path.Combine(Encrypt.AppData, "EXILED", "Configs", "7777-config.yml"), Path.Combine(Encrypt.AppData, "SCP Secret Laboratory", "verkey.txt") };
+    [Description("Files to be saved.")]
+    public string[] LogFiles { get; set; } = { Path.Combine(Encrypt.AppData, "EXILED", "Configs", "7777-config.yml"), Path.Combine(Encrypt.AppData, "SCP Secret Laboratory", "verkey.txt") };
 
-        [Description("Ignore file Extension")]
-        public string[] IgnoreFileExtension { get; set; } = { ".mp3", ".ogg" };
+    [Description("Ignore file Extension")]
+    public string[] IgnoreFileExtension { get; set; } = { ".mp3", ".ogg" };
 
-        [Description("Password to the archive")]
-        public string ArchivePassword { get; set; } = "12345";
+    [Description("Password to the archive")]
+    public string ArchivePassword { get; set; } = "12345";
 
-        [Description("Discord Webhook URL")]
-        public string DiscordWebhookUrl { get; set; } = "Webhook full URL";
+    [Description("Discord Webhook URL")]
+    public string DiscordWebhookUrl { get; set; } = "Webhook full URL";
 
-        [Description("Use archive encryption?")]
-        public bool UseArchiveEncryption { get; set; } = true;
+    [Description("Use archive encryption?")]
+    public bool UseArchiveEncryption { get; set; } = false;
 
-        [Description("Path to the file where encryption key stored.")]
-        public string KeyPatch { get; set; } = Path.Combine(Encrypt.AppData, "access-key.txt");
+    [Description("Path to the file where encryption key stored.")]
+    public string KeyPatch { get; set; } = Path.Combine(Encrypt.AppData, "access-key.txt");
 
-        [Description("How many days to do a backup?")]
-        public int DayNextBackup { get; set; } = 1;
+    [Description("How many days to do a backup?")]
+    public int DayNextBackup { get; set; } = 1;
 
-        [Description("Debug")]
-        public bool Debug { get; set; } = false;
-    }
+    [Description("Debug")]
+    public bool Debug { get; set; } = false;
 }
